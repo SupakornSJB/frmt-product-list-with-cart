@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# What is this?
 
-## Getting Started
+This is my solution to the the [Product List With Cart Challenge](https://www.frontendmentor.io/challenges/product-list-with-cart) On [Frontend Mentor](https://www.frontendmentor.io)! <br/>
+I do not own any of the design of the website
 
-First, run the development server:
+# Features
+- Web Frontend with NextJS. (WIP: Responsiveness on mobile currently not supported)
+- Prisma + Postgresql to hold list of products and submitted carts.
+- (WIP) Docker Image for deployment
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# TODO
+- Add Mobile Responsiveness
+- Finished Docker Image for deployment
+
+# How to run
+Since the web is not deployed currently, here is how you may want to check out the project <br/>
+I apologize that the step to run is currently quite long. I'm working on deploying it to a working site with docker atm. <br/>
+
+1. The solution requires Docker to setup postgres, make sure it is installed
+
+2. Clone the Repo 
+```
+git clone git@github.com:SupakornSJB/frmt-product-list-with-cart.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Start docker container for postgres in the ./docker/database
+```
+cd frmt-product-list-with-cart/docker/database
+docker compose up
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Create the .env file at the root of the repo, see the example of the file below
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```
+DATABASE_URL="postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@localhost:5432/{POSTGRES_DB}?schema=public"
 
-## Learn More
+POSTGRES_USER=/*INSERT_SOMETHING_HERE*/
+POSTGRES_PASSWORD=/*INSERT_SOMETHING_HERE*/
+POSTGRES_DB=/*INSERT_SOMETHING_HERE*/
 
-To learn more about Next.js, take a look at the following resources:
+PGADMIN_DEFAULT_EMAIL=/*INSERT_SOMETHING_HERE*/
+PGADMIN_DEFAULT_PASSWORD=/*INSERT_SOMETHING_HERE*/
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Run `npx prisma db push`, to setup prisma
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+6. Run `npm run dev`, the web should be visible on `localhost:3000`, but now we have to setup the products list in the database
 
-## Deploy on Vercel
+7. Run the following code in the `app/page.tsx` file to setup the product list in the database,
+```
+// Setup for Items in DB, Uncomment to use, Need to run only once
+// import jsonItem from "@/public/data.json"
+// import { addItemsToDB } from "@/utils/addToDb";
+// addItemsToDB(jsonItem);
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+8. You can also check the state of the database with pgAdmin on `localhost:8080`
